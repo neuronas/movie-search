@@ -17,7 +17,9 @@ export interface Root {
   total_results: number;
 }
 
-export const fetchMovieList = (url: string) => {
+export const fetchMovieList = (settings: string) => {
+  const url =`${process.env.NEXT_PUBLIC_BASEURL}/discover/movie${settings}`
+
   const params = { params: { sort_by: 'popularity.desc' } }
   return fetch(url)
   .then((res)  => {
