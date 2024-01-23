@@ -17,13 +17,9 @@ export interface Root {
   total_results: number;
 }
 
-export const fetchMovieList = (pattern: string | null, page: number) => {
-  let query = `${process.env.NEXT_PUBLIC_BASEURL}`
-  if (pattern !== null) {
-    query += `/search/movie?query=${pattern}&page=${page}&language=es-AR`
-  } else {
-    query += `/discover/movie?sort_by=popularity.desc`
-  }
+export const fetchMovieList = (pattern: string, page: number) => {
+  if (!pattern) return Promise.reject()
+  const query = `${process.env.NEXT_PUBLIC_BASEURL}/search/movie?query=${pattern}&page=${page}&language=es-AR`
 
   const options = {
     method: 'GET',
