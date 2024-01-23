@@ -17,8 +17,14 @@ export interface Root {
   total_results: number;
 }
 
-export const fetchMovieList = (pattern: string, page: number) => {
-  const query = `${process.env.NEXT_PUBLIC_BASEURL}/search/movie?query=${pattern}&page=${page}&language=es-AR`
+export const fetchMovieList = (pattern: string | null, page: number) => {
+  let query = `${process.env.NEXT_PUBLIC_BASEURL}`
+  if (pattern !== null) {
+    query += `/search/movie?query=${pattern}&page=${page}&language=es-AR`
+  } else {
+    query += `/discover/movie?sort_by=popularity.desc`
+  }
+
   const options = {
     method: 'GET',
     headers: {
@@ -29,7 +35,6 @@ export const fetchMovieList = (pattern: string, page: number) => {
   const params = { params: { sort_by: 'popularity.desc' } }
   return fetch(query, options)
   .then((res)  => {
-    // console.log("res", res.json())
     return res.json()
   })
 }
