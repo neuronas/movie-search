@@ -1,4 +1,4 @@
-
+'use server'
 export interface Movie {
   id: number
   original_title: string; 
@@ -17,12 +17,19 @@ export interface Root {
   total_results: number;
 }
 
-export const fetchMovieList = (settings: string) => {
-  const url =`${process.env.NEXT_PUBLIC_BASEURL}/discover/movie${settings}`
-
+export const fetchMovieList = (pattern: string, page: number) => {
+  const query = `${process.env.NEXT_PUBLIC_BASEURL}/search/movie?query=${pattern}&page=${page}&language=es-AR`
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${process.env.ACCESS_TOKEN}`
+    }
+  };
   const params = { params: { sort_by: 'popularity.desc' } }
-  return fetch(url)
+  return fetch(query, options)
   .then((res)  => {
+    // console.log("res", res.json())
     return res.json()
   })
 }
