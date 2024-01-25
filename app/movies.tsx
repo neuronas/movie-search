@@ -1,39 +1,32 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { SearchBar } from './SearchBar';
 import { fetchMovieList, Movie } from './api';
-import { useMoviesStore, useSearchStore } from "@/lib/store";
+import { useMoviesStore, useSearchStore, useBoundStore, MovieList } from "@/lib/store";
 
 export function Movies() {
   const { movieList, addToList: handleSetMovieList, removeList } = useMoviesStore((state) => state);
   const { pattern } = useSearchStore((state) => state);
 
-  const [page, setPage] = useState<number>(1)
+  const hasHydrated = useBoundStore(state => state._hasHydrated);
   const fetcher = ({ pageParam }: {pageParam: number}) => {
-    setPage(pageParam)
-    if (!pattern) return
     return fetchMovieList(pattern, pageParam)
   }
 
   const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery({
     queryKey: ['movies', pattern],
-    initialPageParam: 1,
     queryFn: fetcher,
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => lastPageParam + 1,
+    initialPageParam: 1,
+    initialData: hasHydrated && movieList || undefined,
+    enabled: hasHydrated,
+    refetchOnMount: false,
   })
 
   useEffect(() => {
-    if (data) {
-      const newList = data?.pages[page-1]?.results
-      if (newList) {
-        if (page > 1) {
-          handleSetMovieList(newList)
-        } else {
-          removeList()
-          handleSetMovieList(newList)
-        }
-      }
+    if (hasHydrated && data && data.pages[0]) {
+      handleSetMovieList(data as MovieList)
     }
   }, [data])
 

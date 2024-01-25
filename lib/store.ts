@@ -1,16 +1,26 @@
-import { create, StateCreator } from "zustand";
+import { create } from "zustand";
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { Movie } from '../app/api'; 
+import { Root } from '../app/api';
 
 interface MovieStore  { 
-  movieList: Movie[];
-  addToList: (arg: Movie[]) => void;
+  movieList: MovieList | undefined
+  addToList: (arg: MovieList) => void;
   removeList: () => void;
+}
+
+export interface MovieList {
+  pageParams: number[];
+  pages: Root[];
 }
 
 interface SearchStore {
   pattern: string;
   setPattern: (arg: string) => void;
+}
+
+interface BoundStore {
+  _hasHydrated: boolean;
+  setHasHydrated: (state: any) => void;
 }
 
 export const useSearchStore = create(
@@ -29,9 +39,9 @@ export const useSearchStore = create(
 export const useMoviesStore = create(
   persist<MovieStore>(
     (set, get) => ({
-      movieList: [],
-      addToList: (newMovies) => set((state) => ({ movieList: [ ...state.movieList, ...newMovies ]})),
-      removeList: () => set({ movieList: [] })
+      movieList: undefined,
+      addToList: (newMovies) => set((state) => ({ movieList: newMovies })),
+      removeList: () => set({ movieList: undefined }),
     }),
     {
       name: 'movie-storage', // name of the item in the storage (must be unique)
@@ -39,3 +49,22 @@ export const useMoviesStore = create(
     },
   ),
 )
+
+export const useBoundStore = create(
+  persist<BoundStore>(
+    (set, get) => ({
+      _hasHydrated: false,
+      setHasHydrated: (state) => {
+        set({
+          _hasHydrated: state
+        });
+      }
+    }),
+    {
+      name: '',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+      }
+    }
+  )
+);
