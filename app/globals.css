@@ -91,12 +91,22 @@ body {
 }
 
 .movie-item {
-  width: 600px;
-  height: 300px;
-  margin: 10px;
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 800px;
+  height: 400px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   overflow: hidden;
+}
+
+.desc {
+  width: 60%;
+  height: 400px;
+  font-size: 20px;
+  padding-left: 20px;
 }

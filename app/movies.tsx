@@ -55,18 +55,27 @@ export function Movies() {
   }, []);
 
   return(
-    <div>
-        <div className="w-full">
-          <SearchBar />
-        </div>
-      {
-        movieList.map((movie: Movie, k: number) => (
-          <div key={k} className="movie-item w-48 m-4 p-4 bg-white shadow-md flex flex-col items-center">
-            <h2>{movie.title}</h2>
-            <img src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${movie.poster_path}`} alt={k} className="mb-4 w-full h-auto" />
+    <>
+      {hasHydrated &&
+      <div>
+          <div className="w-full">
+            <SearchBar />
           </div>
-        ))
+        {
+          movieList && movieList?.pages?.flatMap((page) => page.results).map((movie: Movie, k: number) => (
+            <div key={k} className="movie-item w-48 m-10 p-4 bg-white shadow-md rounded-md">
+              <div className='image'>
+                {movie.poster_path && <img src={`https://www.themoviedb.org/t/p/w220_and_h330_face/${movie.poster_path}`} alt={k} className="mb-1 h-auto" />}
+              </div>
+              <div className='desc text-clip overflow-hidden'>
+                <h1 className='text-2xl'>{movie.title}</h1>
+                <span>{movie.overview}</span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
       }
-    </div>
+    </>
   )
 }

@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from "zod";
 import { Input } from '@/components/ui/input';
+import { Label } from "@/components/ui/label"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { debounce } from 'lodash';
 import { useSearchStore } from "@/lib/store";
@@ -26,7 +27,7 @@ export function SearchBar() {
     resolver: zodResolver(searchSchema),
   });
 
-  const hableChange = useCallback(
+  const handleChange = useCallback(
     debounce((string) => {
       setPattern(string)
     }, 500)
@@ -34,17 +35,23 @@ export function SearchBar() {
 
   useEffect(() => {
     const currValue = getValues("searchText")
-    if (pattern && ! currValue) {
+    if (pattern && !currValue) {
       setValue("searchText", pattern);
     }
-  }, [pattern]);
+  }, []);
+
+
 
   return(
-    <form onChange={handleSubmit(({searchText}) => hableChange(searchText))} onSubmit={(e) => {((e.preventDefault()))}}>
-      <label>
-        Seach
-        <Input className='w-full' {...register('searchText')} />
-      </label>
+    <form
+      onChange={handleSubmit(({searchText}) => handleChange(searchText))}
+      onSubmit={(e) => {((e.preventDefault()))}}
+      className='w-800 m-10'
+    >
+      <div className="grid items-center gap-1.5">
+        <Label htmlFor="search">Seach Movies</Label>
+        <Input id="search" placeholder="Email" {...register('searchText')} />
+      </div>
       {errors.searchText?.message && <p className="font-bold text-red-600">{errors.searchText?.message as string}</p>}
     </form>
   )
