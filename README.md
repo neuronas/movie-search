@@ -1,6 +1,7 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Boilerplate used to apply an assesment
+
+  This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ___
 
@@ -25,7 +26,7 @@ bun dev
 ```
 
 
-### this project implements those libraries
+### the project implements these libraries
 
 - nextjs
 ```javascript
@@ -42,7 +43,7 @@ bun dev
 ```
 
 **docs**
-- zod : https://zod.dev/?id=introduction
-- react-hook-form : https://github.com/react-hook-form/resolvers#zod
-- zustand : https://docs.pmnd.rs/zustand/getting-started/introduction
 - tanstack query : https://tanstack.com/query/latest/docs/react/reference/useInfiniteQuery
+- react-hook-form : https://github.com/react-hook-form/resolvers#zod
+- zod : https://zod.dev/?id=introduction
+- zustand : https://docs.pmnd.rs/zustand/getting-started/introduction
